@@ -1,2 +1,2 @@
 # Honda-Hub-REST-API
-Back-end API for my React App
+Node.js REST API for "Honda Hub"
