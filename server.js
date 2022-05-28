@@ -11,8 +11,8 @@ async function start() {
   await databaseConfig();
   expressConfig(app);
   routesConfig(app);
-}
 
-app.listen(process.env.PORT || 3030, () =>
-  console.log('Server running port 3030')
-);
+  const PORT = process.env.PORT || 3030;
+
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
