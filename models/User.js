@@ -1,17 +1,17 @@
 const {Schema, model, Types: {ObjectId}} = require('mongoose');
 const emailValidator = require('email-validator');
 
-const NAME_PATTERN = /^[A-Za-z0-9]$/;
+const USER_REGEX = /^[A-Za-z0-9]+$/;
 
 const userSchema = new Schema({
-  userName: {
+  username: {
     type: String,
     required: [true, 'Username is required'],
-    minlength: [2, 'Username must be at least 2 characters long'],
-    maxlength: [15, 'Username must be '],
+    minlength: [2, 'Username too short'],
+    maxlength: [15, 'Username too long'],
     validate: {
       validator(value){
-        return NAME_PATTERN.test(value);
+        return USER_REGEX.test(value);
       },
       message: 'Username can ony contain latin letters and numbers'
     }
@@ -26,7 +26,7 @@ const userSchema = new Schema({
       message: 'Invalid email!'
     }
   },
-  hashedPassword: {
+  password: {
     type: String,
     required: true
   }, 

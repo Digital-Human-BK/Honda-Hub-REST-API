@@ -10,19 +10,20 @@ async function register(username, email, password) {
 
   const hashedPassword = await hash(password, 10);
 
-  const user = {
+  const user = new User({
     username,
     email,
-    hashedPassword,
-  };
+    password: hashedPassword,
+  });
 
-  try {
-    await user.save();
-    return user;
-  } catch (err) {
-    console.log(err);
-    return err;
-  }
+  await user.save();
+
+  return {
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+    myPosts: user.myPosts
+  };
 }
 
 async function login(email, password) {
@@ -48,5 +49,5 @@ async function getUserByEmail(email) {
 
 module.exports = {
   register,
-  login
+  login,
 };
