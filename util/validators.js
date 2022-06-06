@@ -1,9 +1,8 @@
 const emailValidator = require('email-validator');
+const USER_REGEX = /^[A-Za-z0-9]+$/;
+const PWD_REGEX = /^[A-Za-z0-9]{5,20}$/;
 
-function validateBody(body) {
-  const USER_REGEX = /^[A-Za-z0-9]+$/;
-  const PWD_REGEX = /^[A-Za-z0-9]{5,20}$/;
-
+function validateRegister(body) {
   const username = body.username.trim();
   const email = body.email.trim();
   const password = body.password.trim();
@@ -46,4 +45,33 @@ function validateBody(body) {
   }
 }
 
-module.exports = validateBody;
+function validateLogin(body) {
+  const email = body.email.trim();
+  const password = body.password.trim();
+
+  const errors = [];
+
+  if (email === '') {
+    errors.push({ msg: 'Email is required' });
+  }
+  if (emailValidator.validate(email) === false && email !== '') {
+    errors.push({ msg: 'Invalid email' });
+  }
+  if (password === '') {
+    errors.push({ msg: 'Password required' });
+  }
+  if (PWD_REGEX.test(password) === false && password !== '') {
+    errors.push({
+      msg: 'Password must be 5 to 20 characters, latin letters and numbers only',
+    });
+  }
+
+  if (errors.length > 0) {
+    throw errors;
+  }
+}
+
+module.exports = {
+  validateRegister,
+  validateLogin,
+};

@@ -34,13 +34,18 @@ async function login(email, password) {
     throw new Error('Incorrect email or password');
   }
 
-  const hasMatch = await compare(password, user.hashedPassword);
+  const hasMatch = await compare(password, user.password);
   if (hasMatch === false) {
     console.log("Passwords don't match");
     throw new Error('Incorrect email or password');
   }
 
-  return user;
+  return {
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+    myPosts: user.myPosts
+  };
 }
 
 async function getUserByEmail(email) {
