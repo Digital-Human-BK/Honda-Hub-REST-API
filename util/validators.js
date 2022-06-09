@@ -6,7 +6,6 @@ function validateRegister(body) {
   const username = body.username.trim();
   const email = body.email.trim();
   const password = body.password.trim();
-  const repass = body.repass.trim();
 
   const errors = [];
 
@@ -14,13 +13,13 @@ function validateRegister(body) {
     errors.push({ msg: 'Username is required' });
   }
   if (USER_REGEX.test(username) === false && username !== '') {
-    errors.push({ msg: 'Username can ony contain latin letters and numbers' });
+    errors.push({ msg: 'Username must be only latin letters and numbers' });
   }
   if (username.length > 0 && username.length < 2) {
-    errors.push({ msg: 'Username too short' });
+    errors.push({ msg: 'Username must be longer than 2 characters' });
   }
   if (username.length > 15) {
-    errors.push({ msg: 'Username too long' });
+    errors.push({ msg: 'Username must be shorter than 15 characters' });
   }
   if (email === '') {
     errors.push({ msg: 'Email is required' });
@@ -35,9 +34,6 @@ function validateRegister(body) {
     errors.push({
       msg: 'Password must be 5 to 20 characters, latin letters and numbers only',
     });
-  }
-  if (password !== repass) {
-    errors.push({ msg: "Passwords don't match" });
   }
 
   if (errors.length > 0) {
@@ -58,11 +54,11 @@ function validateLogin(body) {
     errors.push({ msg: 'Invalid email' });
   }
   if (password === '') {
-    errors.push({ msg: 'Password required' });
+    errors.push({ msg: 'Password is required' });
   }
   if (PWD_REGEX.test(password) === false && password !== '') {
     errors.push({
-      msg: 'Password must be 5 to 20 characters, latin letters and numbers only',
+      msg: 'Password 5 to 20 characters, latin letters and numbers only',
     });
   }
 
