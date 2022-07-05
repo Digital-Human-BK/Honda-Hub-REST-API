@@ -9,12 +9,9 @@ async function getPosts(category) {
 }
 
 async function getPost(id) {
-  return (
-    Post.findById(id)
-      .populate('author', 'username')
-      // .populate('comments')
-      .lean()
-  );
+  return Post.findById(id)
+          .populate('author', 'username')
+          .lean();
 }
 
 async function updatePost(id, data) {
@@ -35,7 +32,7 @@ async function createPost(data) {
 }
 
 async function deletePost(id) {
-  return Post.findByIdAndDelete(id);
+  await Post.findByIdAndDelete(id);
 }
 
 module.exports = {

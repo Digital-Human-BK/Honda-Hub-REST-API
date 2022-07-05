@@ -37,11 +37,6 @@ const userSchema = new Schema({
     immutable: true,
     default: () => Date.now()
   }
-  // myPosts: {
-  //   type: [ObjectId],
-  //   ref: 'Post',
-  //   default: []
-  // }
 });
 
 userSchema.index({email: 1}, {

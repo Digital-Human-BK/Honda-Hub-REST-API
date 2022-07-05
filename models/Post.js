@@ -25,11 +25,6 @@ const postSchema = new Schema(
       required: true,
       immutable: true,
     },
-    // comments: {
-    //   type: [ObjectId],
-    //   ref: 'Comment',
-    //   default: []
-    // }
   },
   { timestamps: true }
 );
