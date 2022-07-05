@@ -22,7 +22,7 @@ async function register(username, email, password) {
     _id: user._id,
     username: user.username,
     email: user.email,
-    myPosts: user.myPosts
+    registeredOn: user.registeredOn
   };
 }
 
@@ -44,7 +44,7 @@ async function login(email, password) {
     _id: user._id,
     username: user.username,
     email: user.email,
-    myPosts: user.myPosts
+    registeredOn: user.registeredOn
   };
 }
 

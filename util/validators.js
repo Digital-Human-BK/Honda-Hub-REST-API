@@ -57,9 +57,7 @@ function validateLogin(body) {
     errors.push({ msg: 'Password is required' });
   }
   if (PWD_REGEX.test(password) === false && password !== '') {
-    errors.push({
-      msg: 'Password 5 to 20 characters, latin letters and numbers only',
-    });
+    errors.push({ msg: 'Invalid password' });
   }
 
   if (errors.length > 0) {

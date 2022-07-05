@@ -19,6 +19,8 @@ const userSchema = new Schema({
   email: {
     type: String,
     required: [true, 'Email is required'],
+    lowercase: true,
+    immutable: true,
     validate: {
       validator(value){
         return emailValidator.validate(value);
@@ -30,11 +32,16 @@ const userSchema = new Schema({
     type: String,
     required: true
   }, 
-  myPosts: {
-    type: [ObjectId],
-    ref: 'Post',
-    default: []
+  registeredOn: {
+    type: Date,
+    immutable: true,
+    default: () => Date.now()
   }
+  // myPosts: {
+  //   type: [ObjectId],
+  //   ref: 'Post',
+  //   default: []
+  // }
 });
 
 userSchema.index({email: 1}, {

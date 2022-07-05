@@ -26,7 +26,6 @@ router.post('/login', async (req, res) => {
   try {
     validateLogin(req.body);
 
-    req.body.password.trim();
     const user = await login(
       req.body.email.trim().toLowerCase(),
       req.body.password.trim()
