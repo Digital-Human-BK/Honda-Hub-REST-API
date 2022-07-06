@@ -1,5 +1,9 @@
 const Post = require('../models/Post');
 
+async function searchPosts(query){
+  return Post.find({title: { '$regex' : query, '$options' : 'i' }}).lean();
+};
+
 async function getPostsCount(category) {
   return Post.countDocuments({ category });
 }
@@ -36,6 +40,7 @@ async function deletePost(id) {
 }
 
 module.exports = {
+  searchPosts,
   getPostsCount,
   getPosts,
   getPost,

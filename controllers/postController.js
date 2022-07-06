@@ -5,17 +5,29 @@ const mapErrors = require('../util/mappers');
 
 router.get('/posts-count', async (req, res) => {
   try {
-    const [offtopic, common] = await Promise.all([
-      service.getPostsCount('offtopic'),
-      service.getPostsCount('common'),
+    const [general, problems, events] = await Promise.all([
+      service.getPostsCount('general'),
+      service.getPostsCount('problems'),
+      service.getPostsCount('events')
     ]);
-    res.status(200).json({offtopic, common});
+    res.status(200).json({general, problems, events});
   } catch (err) {
     const error = mapErrors(err);
     console.log(error);
     res.status(404).json(error);
   }
 });
+
+router.get('/search', async (req, res) => {
+  try {
+    const posts = await service.searchPosts(req.query.term);
+    res.status(200).json(posts);
+  } catch (err) {
+    const error = mapErrors(err);
+    console.log(error);
+    res.status(404).json(error);
+  }
+})
 
 router.get('/posts', async (req, res) => {
   try {
