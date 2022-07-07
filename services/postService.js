@@ -1,21 +1,32 @@
 const Post = require('../models/Post');
 
-async function searchPosts(query){
-  return Post.find({title: { '$regex' : query, '$options' : 'i' }}).lean();
-};
+async function searchPosts(query) {
+  return Post.find({ title: { $regex: query, $options: 'i' } })
+    .populate('author', 'username')
+    .lean();
+}
 
 async function getPostsCount(category) {
   return Post.countDocuments({ category });
 }
 
-async function getPosts(category) {
-  return Post.find({ category }).sort({ createdAt: 1 }).lean();
+async function getPosts() {
+  return Post.find()
+    .sort({ createdAt: 1 })
+    .populate('author', 'username')
+    .lean()
+    .limit(20);
+}
+
+async function getCategoryPosts(category) {
+  return Post.find({ category })
+    .sort({ createdAt: 1 })
+    .populate('author', 'username')
+    .lean();
 }
 
 async function getPost(id) {
-  return Post.findById(id)
-          .populate('author', 'username')
-          .lean();
+  return Post.findById(id).populate('author', 'username').lean();
 }
 
 async function updatePost(id, data) {
@@ -43,6 +54,7 @@ module.exports = {
   searchPosts,
   getPostsCount,
   getPosts,
+  getCategoryPosts,
   getPost,
   updatePost,
   createPost,

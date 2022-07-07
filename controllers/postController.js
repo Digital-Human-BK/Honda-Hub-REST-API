@@ -8,9 +8,9 @@ router.get('/posts-count', async (req, res) => {
     const [general, problems, events] = await Promise.all([
       service.getPostsCount('general'),
       service.getPostsCount('problems'),
-      service.getPostsCount('events')
+      service.getPostsCount('events'),
     ]);
-    res.status(200).json({general, problems, events});
+    res.status(200).json({ general, problems, events });
   } catch (err) {
     const error = mapErrors(err);
     console.log(error);
@@ -27,11 +27,22 @@ router.get('/search', async (req, res) => {
     console.log(error);
     res.status(404).json(error);
   }
-})
+});
 
 router.get('/posts', async (req, res) => {
   try {
     const posts = await service.getPosts(req.query.category);
+    res.status(200).json(posts);
+  } catch (err) {
+    const error = mapErrors(err);
+    console.log(error);
+    res.status(404).json(error);
+  }
+});
+
+router.get('/categories/:category', async (req, res) => {
+  try {
+    const posts = await service.getCategoryPosts(req.params.category);
     res.status(200).json(posts);
   } catch (err) {
     const error = mapErrors(err);

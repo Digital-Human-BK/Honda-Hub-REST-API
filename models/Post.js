@@ -6,7 +6,7 @@ const postSchema = new Schema(
       type: String,
       required: [true, 'Title is required'],
       minlength: [3, 'Title must be 3 to 80 characters long'],
-      maxlength: [60, 'Title must be 3 to 80 characters long'],
+      maxlength: [80, 'Title must be 3 to 80 characters long'],
     },
     description: {
       type: String,
@@ -16,6 +16,10 @@ const postSchema = new Schema(
     },
     category: {
       type: String,
+      enum: {
+        values: ['general', 'problems', 'events'],
+        message: 'Invalid category'
+      },
       required: true,
       immutable: true,
     },
