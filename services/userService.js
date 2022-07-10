@@ -17,6 +17,7 @@ async function register(username, email, password) {
   });
 
   await user.save();
+  console.log(user.rank);
 
   return {
     _id: user._id,

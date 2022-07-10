@@ -8,11 +8,11 @@ const postSchema = new Schema(
       minlength: [3, 'Title must be 3 to 80 characters long'],
       maxlength: [80, 'Title must be 3 to 80 characters long'],
     },
-    description: {
+    text: {
       type: String,
-      required: [true, 'Description is required'],
-      minlength: [2, 'Description must be 2 to 2000 characters long'],
-      maxlength: [2000, 'Description must be 2 to 2000 characters long'],
+      required: [true, 'Content required'],
+      minlength: [2, 'Content must be 2 to 2000 characters long'],
+      maxlength: [2000, 'Content must be 2 to 2000 characters long'],
     },
     category: {
       type: String,
@@ -28,6 +28,10 @@ const postSchema = new Schema(
       ref: 'User',
       required: true,
       immutable: true,
+    },
+    likes: {
+      type: [String],
+      default: []
     },
   },
   { timestamps: true }
