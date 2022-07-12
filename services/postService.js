@@ -26,7 +26,9 @@ async function getCategoryPosts(category) {
 }
 
 async function getPost(id) {
-  return Post.findById(id).populate('author', 'username').lean();
+  return Post.findById(id)
+    .populate('author', 'username role rank reputation posts drives sign')
+    .lean();
 }
 
 async function updatePost(id, data) {

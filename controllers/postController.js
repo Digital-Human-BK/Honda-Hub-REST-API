@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 const service = require('../services/postService');
+const { incrementUserPosts } = require('../services/userService');
 const mapErrors = require('../util/mappers');
 
 router.get('/posts-count', async (req, res) => {
@@ -53,17 +54,19 @@ router.get('/categories/:category', async (req, res) => {
 
 router.post('/posts', async (req, res) => {
   const title = req.body.title.trim();
-  const description = req.body.description.trim();
+  const text = req.body.text.trim();
   const category = req.body.category.trim();
-  const author = req.body.author.trim();
+  const author = req.body.author;
 
   try {
+    
     const post = await service.createPost({
       title,
-      description,
+      text,
       category,
       author,
     });
+    await incrementUserPosts(author);
 
     res.status(201).json(post);
   } catch (err) {

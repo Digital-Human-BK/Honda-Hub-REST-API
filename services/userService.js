@@ -23,7 +23,7 @@ async function register(username, email, password) {
     _id: user._id,
     username: user.username,
     email: user.email,
-    registeredOn: user.registeredOn
+    registeredOn: user.registeredOn,
   };
 }
 
@@ -31,13 +31,13 @@ async function login(email, password) {
   const user = await getUserByEmail(email);
 
   if (user === null) {
-    console.log("User doesn't exist");
+    console.log('User doesn\'t exist');
     throw new Error('Incorrect email or password');
   }
 
   const hasMatch = await compare(password, user.password);
   if (hasMatch === false) {
-    console.log("Passwords don't match");
+    console.log('Passwords don\'t match');
     throw new Error('Incorrect email or password');
   }
 
@@ -45,7 +45,7 @@ async function login(email, password) {
     _id: user._id,
     username: user.username,
     email: user.email,
-    registeredOn: user.registeredOn
+    registeredOn: user.registeredOn,
   };
 }
 
@@ -53,7 +53,23 @@ async function getUserByEmail(email) {
   return User.findOne({ email });
 }
 
+async function incrementUserPosts(id) {
+  const user = await User.findById(id);
+
+  user.posts += 1;
+  await user.save();
+}
+
+async function decrementUserPosts(id) {
+  const user = await User.findById(id);
+
+  user.posts -= 1;
+  await user.save();
+}
+
 module.exports = {
   register,
   login,
+  incrementUserPosts,
+  decrementUserPosts,
 };

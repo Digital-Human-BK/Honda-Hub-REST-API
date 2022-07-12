@@ -4,9 +4,9 @@ const commentSchema = new Schema(
   {
     text: {
       type: String,
-      required: [true, 'Can\'t post empty comment'],
-      minlength: [2, 'Comment must be 2 to 1000 characters long'],
-      maxlength: [1000, 'Comment must be 2 to 1000 characters long'],
+      required: [true, 'Content required'],
+      minlength: [1, 'Comment must be 1 to 1000 characters long'],
+      maxlength: [1000, 'Comment must be 1 to 1000 characters long'],
     },
     postId: {
       type: ObjectId,

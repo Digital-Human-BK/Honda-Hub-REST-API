@@ -1,4 +1,4 @@
-const {Schema, model, Types: {ObjectId}} = require('mongoose');
+const { Schema, model } = require('mongoose');
 const emailValidator = require('email-validator');
 
 const USER_REGEX = /^[A-Za-z0-9]+$/;
@@ -10,11 +10,11 @@ const userSchema = new Schema({
     minlength: [2, 'Min username length is 2 characters'],
     maxlength: [16, 'Max username length is 16 characters'],
     validate: {
-      validator(value){
+      validator(value) {
         return USER_REGEX.test(value);
       },
-      message: 'Username can ony contain latin letters and numbers'
-    }
+      message: 'Username can ony contain latin letters and numbers',
+    },
   },
   email: {
     type: String,
@@ -22,19 +22,19 @@ const userSchema = new Schema({
     lowercase: true,
     immutable: true,
     validate: {
-      validator(value){
+      validator(value) {
         return emailValidator.validate(value);
       },
-      message: 'Invalid email!'
-    }
+      message: 'Invalid email!',
+    },
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   role: {
     type: String,
-    default: 'User'
+    default: 'User',
   },
   rank: {
     type: String,
@@ -43,54 +43,57 @@ const userSchema = new Schema({
   reputation: {
     type: Number,
     default: 0,
-    min: 0
+    min: 0,
   },
   posts: {
     type: Number,
-    default: 100,
-    min: 0
+    default: 0,
+    min: 0,
   },
   drives: {
     type: String,
-    default: null,
+    default: 'Nothing yet',
     minlength: [1, 'Min length is 1 character'],
-    maxlength: [30, 'Max length is 30 characters']
+    maxlength: [60, 'Max length is 60 characters'],
   },
   sign: {
     type: String,
     default: null,
     minlength: [3, 'Min sign length is 3 characters'],
-    maxlength: [200, 'Max sign length is 200 characters']
+    maxlength: [200, 'Max sign length is 200 characters'],
   },
   registeredOn: {
     type: Date,
     immutable: true,
-    default: () => Date.now()
-  }
+    default: () => Date.now(),
+  },
 });
 
-userSchema.pre('save', function(next) {
-  if(this.posts < 10) {
+userSchema.pre('save', function (next) {
+  if (this.posts < 10) {
     this.rank = 'Fan';
   } else if (this.posts < 100) {
     this.rank = 'Enthusiast';
-  } else if (this.posts < 1000){
+  } else if (this.posts < 1000) {
     this.rank = 'Master';
   } else if (this.posts >= 1000) {
-    this.rank = 'Sensei'; 
+    this.rank = 'Sensei';
   } else {
     this.rank = 'Fan';
   }
   next();
-})
-
-userSchema.index({email: 1}, {
-  unique: true,
-  collation: {
-    locale: 'en',
-    strength: 2
-  }
 });
+
+userSchema.index(
+  { email: 1 },
+  {
+    unique: true,
+    collation: {
+      locale: 'en',
+      strength: 2,
+    },
+  }
+);
 
 const User = model('User', userSchema);
 
