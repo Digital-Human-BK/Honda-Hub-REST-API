@@ -92,11 +92,11 @@ router.get('/posts/:id', async (req, res) => {
 
 router.put('/posts/:id', async (req, res) => {
   const title = req.body.title.trim();
-  const description = req.body.description.trim();
+  const text = req.body.text.trim();
   try {
     const post = await service.updatePost(req.params.id, {
       title,
-      description,
+      text,
     });
     res.status(200).json(post);
   } catch (err) {

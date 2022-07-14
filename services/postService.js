@@ -35,7 +35,7 @@ async function updatePost(id, data) {
   const post = await Post.findById(id);
 
   post.title = data.title;
-  post.description = data.description;
+  post.text = data.text;
 
   await post.save();
   return post;
