@@ -14,14 +14,27 @@ router.get('/post-comments/:postId', async (req, res) => {
   }
 });
 
+router.delete('/post-comments/:postId', async (req, res) => {
+  try {
+    await service.deleteComments(req.params.postId);
+    res.status(204).end();
+  } catch (err) {
+    const error = mapErrors(err);
+    console.log(error);
+    res.status(404).json(error);
+  }
+});
+
 router.post('/comments', async (req, res) => {
   const text = req.body.text.trim();
+  const quote = req.body.quote;
   const postId = req.body.postId;
   const author = req.body.author;
 
   try {
     const comment = await service.createComment({
       text,
+      quote,
       postId,
       author,
     });

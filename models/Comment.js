@@ -8,6 +8,11 @@ const commentSchema = new Schema(
       minlength: [1, 'Comment must be 1 to 1000 characters long'],
       maxlength: [1000, 'Comment must be 1 to 1000 characters long'],
     },
+    quote : {
+      type: String,
+      default: null
+    },
+
     postId: {
       type: ObjectId,
       required: true,

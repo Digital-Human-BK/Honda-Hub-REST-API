@@ -6,6 +6,10 @@ async function getComments(postId) {
     .lean();
 }
 
+async function deleteComments(postId) {
+  return Comment.deleteMany({ postId });
+}
+
 async function getComment(id) {
   return Comment.find({ id }).lean();
 }
@@ -31,6 +35,7 @@ async function deleteComment(id) {
 
 module.exports = {
   getComments,
+  deleteComments,
   getComment,
   createComment,
   updateComment,
