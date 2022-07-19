@@ -23,10 +23,18 @@ const commentSchema = new Schema(
       ref: 'User',
       required: true,
     },
-    likes: {
+    votes: {
+      type: Number,
+      default: 0
+    },
+    voters: {
       type: [String],
       default: []
     },
+    updated: {
+      type: Boolean,
+      default: false
+    }
   },
   { timestamps: true }
 );

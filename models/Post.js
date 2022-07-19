@@ -29,10 +29,18 @@ const postSchema = new Schema(
       required: true,
       immutable: true,
     },
-    likes: {
-      type: [String],
+    votes: {
+      type: Number,
+      default: 0
+    },
+    voters: {
+      type: [ObjectId],
       default: []
     },
+    updated: {
+      type: Boolean,
+      default: false
+    }
   },
   { timestamps: true }
 );

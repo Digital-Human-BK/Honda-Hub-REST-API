@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 const service = require('../services/commentService');
+const { updateUserReputation } = require('../services/userService');
 const mapErrors = require('../util/mappers');
 
 router.get('/post-comments/:postId', async (req, res) => {
@@ -75,6 +76,24 @@ router.delete('/comments/:id', async (req, res) => {
   try {
     await service.deleteComment(req.params.id);
     res.status(204).end();
+  } catch (err) {
+    const error = mapErrors(err);
+    console.log(error);
+    res.status(404).json(error);
+  }
+});
+
+router.put('/comment-vote/:id', async (req, res) => {
+  const id = req.params.id;
+  const userId = req.body.userId;
+  const authorId = req.body.authorId;
+  const value = req.body.value;
+  try {
+    const [comment] = await Promise.all([
+      service.voteForComment(id, userId, value),
+      updateUserReputation(authorId, value),
+    ]);
+    res.status(200).json(comment);
   } catch (err) {
     const error = mapErrors(err);
     console.log(error);

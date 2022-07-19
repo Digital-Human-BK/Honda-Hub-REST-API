@@ -36,6 +36,7 @@ async function updatePost(id, data) {
 
   post.title = data.title;
   post.text = data.text;
+  post.updated = true;
 
   await post.save();
   return post;
@@ -52,6 +53,19 @@ async function deletePost(id) {
   await Post.findByIdAndDelete(id);
 }
 
+async function voteForPost(id, userId, value){
+  const post = await Post.findById(id);
+
+  if(post.voters.includes(userId)){
+    throw new Error('You have already voted');
+  }
+  post.voters.push(userId);
+  post.votes += value;
+
+  await post.save();
+  return post;
+};
+
 module.exports = {
   searchPosts,
   getPostsCount,
@@ -61,4 +75,5 @@ module.exports = {
   updatePost,
   createPost,
   deletePost,
+  voteForPost
 };

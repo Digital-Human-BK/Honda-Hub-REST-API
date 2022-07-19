@@ -17,7 +17,6 @@ async function register(username, email, password) {
   });
 
   await user.save();
-  console.log(user.rank);
 
   return {
     _id: user._id,
@@ -31,13 +30,13 @@ async function login(email, password) {
   const user = await getUserByEmail(email);
 
   if (user === null) {
-    console.log('User doesn\'t exist');
+    console.log("User doesn't exist");
     throw new Error('Incorrect email or password');
   }
 
   const hasMatch = await compare(password, user.password);
   if (hasMatch === false) {
-    console.log('Passwords don\'t match');
+    console.log("Passwords don't match");
     throw new Error('Incorrect email or password');
   }
 
@@ -60,16 +59,18 @@ async function incrementUserPosts(id) {
   await user.save();
 }
 
-async function decrementUserPosts(id) {
-  const user = await User.findById(id);
+async function updateUserReputation(id, value) {
 
-  user.posts -= 1;
-  await user.save();
+  const user = await User.findById(id);
+  if (user.reputation + value >= 0) {
+    user.reputation += value;
+    await user.save();
+  }
 }
 
 module.exports = {
   register,
   login,
   incrementUserPosts,
-  decrementUserPosts,
+  updateUserReputation,
 };

@@ -70,13 +70,13 @@ const userSchema = new Schema({
 });
 
 userSchema.pre('save', function (next) {
-  if (this.posts < 10) {
+  if (this.posts < 5) {
     this.rank = 'Fan';
-  } else if (this.posts < 100) {
+  } else if (this.posts < 10) {
     this.rank = 'Enthusiast';
-  } else if (this.posts < 1000) {
+  } else if (this.posts < 20) {
     this.rank = 'Master';
-  } else if (this.posts >= 1000) {
+  } else if (this.posts >= 100) {
     this.rank = 'Sensei';
   } else {
     this.rank = 'Fan';

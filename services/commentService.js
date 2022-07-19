@@ -25,6 +25,8 @@ async function updateComment(id, data) {
   const comment = await Comment.findById(id);
 
   comment.text = data.text;
+  comment.updated = true;
+  
   await comment.save();
   return comment;
 }
@@ -33,6 +35,20 @@ async function deleteComment(id) {
   await Comment.findByIdAndDelete(id);
 }
 
+async function voteForComment(id, userId, value){
+  const comment = await Comment.findById(id);
+
+
+  if(comment.voters.includes(userId)){
+    throw new Error('You have already voted');
+  }
+  comment.voters.push(userId);
+  comment.votes += value;
+
+  await comment.save();
+  return comment;
+};
+
 module.exports = {
   getComments,
   deleteComments,
@@ -40,4 +56,5 @@ module.exports = {
   createComment,
   updateComment,
   deleteComment,
+  voteForComment
 };

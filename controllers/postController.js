@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const service = require('../services/postService');
-const { incrementUserPosts } = require('../services/userService');
+const {incrementUserPosts, updateUserReputation} = require('../services/userService');
 const mapErrors = require('../util/mappers');
 
 router.get('/posts-count', async (req, res) => {
@@ -59,7 +59,6 @@ router.post('/posts', async (req, res) => {
   const author = req.body.author;
 
   try {
-    
     const post = await service.createPost({
       title,
       text,
@@ -80,7 +79,7 @@ router.get('/posts/:id', async (req, res) => {
   try {
     const post = await service.getPost(req.params.id);
     if (post === null) {
-      throw new Error('Page not found');
+      throw new Error('404 Resource Not Found');
     }
     res.status(200).json(post);
   } catch (err) {
@@ -110,6 +109,25 @@ router.delete('/posts/:id', async (req, res) => {
   try {
     await service.deletePost(req.params.id);
     res.status(204).end();
+  } catch (err) {
+    const error = mapErrors(err);
+    console.log(error);
+    res.status(404).json(error);
+  }
+});
+
+router.put('/post-vote/:id', async (req, res) => {
+  const id = req.params.id;
+  const userId = req.body.userId;
+  const authorId = req.body.authorId;
+  const value = req.body.value;
+
+  try {
+    const [post] = await Promise.all([
+      service.voteForPost(id, userId, value),
+      updateUserReputation(authorId, value),
+    ]);
+    res.status(200).json(post);
   } catch (err) {
     const error = mapErrors(err);
     console.log(error);
