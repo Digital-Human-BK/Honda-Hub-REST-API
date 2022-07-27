@@ -20,8 +20,15 @@ async function getPosts() {
 
 async function getCategoryPosts(category) {
   return Post.find({ category })
-    .sort({ createdAt: 1 })
+    .sort({ createdAt: -1 })
     .populate('author', 'username')
+    .lean();
+}
+
+async function getUserPosts(userId) {
+  return Post.find({ author: userId },{ title: 1, category: 1, createdAt: 1, author: 1 })
+    .populate('author', 'username')
+    .sort({ createdAt: -1 })
     .lean();
 }
 
@@ -42,6 +49,10 @@ async function updatePost(id, data) {
   return post;
 }
 
+async function deletePost(id) {
+  await Post.findByIdAndDelete(id);
+}
+
 async function createPost(data) {
   const post = new Post(data);
   await post.save();
@@ -49,14 +60,10 @@ async function createPost(data) {
   return post;
 }
 
-async function deletePost(id) {
-  await Post.findByIdAndDelete(id);
-}
-
-async function voteForPost(id, userId, value){
+async function voteForPost(id, userId, value) {
   const post = await Post.findById(id);
 
-  if(post.voters.includes(userId)){
+  if (post.voters.includes(userId)) {
     throw new Error('You have already voted');
   }
   post.voters.push(userId);
@@ -64,16 +71,17 @@ async function voteForPost(id, userId, value){
 
   await post.save();
   return post;
-};
+}
 
 module.exports = {
   searchPosts,
   getPostsCount,
   getPosts,
   getCategoryPosts,
+  getUserPosts,
   getPost,
   updatePost,
-  createPost,
   deletePost,
-  voteForPost
+  createPost,
+  voteForPost,
 };

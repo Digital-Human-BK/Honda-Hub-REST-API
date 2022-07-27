@@ -1,7 +1,11 @@
 const router = require('express').Router();
 
 const service = require('../services/postService');
-const {incrementUserPosts, updateUserReputation} = require('../services/userService');
+const {
+  incrementUserPosts,
+  updateUserReputation,
+  getUserInfo,
+} = require('../services/userService');
 const mapErrors = require('../util/mappers');
 
 router.get('/posts-count', async (req, res) => {
@@ -41,8 +45,26 @@ router.get('/posts', async (req, res) => {
   }
 });
 
-router.get('/categories/:category', async (req, res) => {
+router.get('/user-posts/:userId', async (req, res) => {
   try {
+    const userData = await Promise.all([
+      getUserInfo(req.params.userId),
+      service.getUserPosts(req.params.userId)
+    ]);
+    res.status(200).json(userData);
+  } catch (err) {
+    const error = mapErrors(err);
+    console.log(error);
+    res.status(404).json(error);
+  }
+});
+
+router.get('/categories/:category', async (req, res) => {
+  const categories = ['general', 'problems', 'events'];
+  try {
+    if (categories.includes(req.params.category) === false) {
+      throw new Error('404 Page not found');
+    }
     const posts = await service.getCategoryPosts(req.params.category);
     res.status(200).json(posts);
   } catch (err) {

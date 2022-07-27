@@ -52,6 +52,11 @@ async function getUserByEmail(email) {
   return User.findOne({ email });
 }
 
+async function getUserInfo(id){
+  const user = await User.findById({ _id: id}, {password: 0, email: 0}).lean();
+  return user;
+};
+
 async function incrementUserPosts(id) {
   const user = await User.findById(id);
 
@@ -71,6 +76,7 @@ async function updateUserReputation(id, value) {
 module.exports = {
   register,
   login,
+  getUserInfo,
   incrementUserPosts,
   updateUserReputation,
 };

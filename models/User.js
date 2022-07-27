@@ -9,6 +9,7 @@ const userSchema = new Schema({
     required: [true, 'Username is required'],
     minlength: [2, 'Min username length is 2 characters'],
     maxlength: [16, 'Max username length is 16 characters'],
+    unique: true,
     validate: {
       validator(value) {
         return USER_REGEX.test(value);

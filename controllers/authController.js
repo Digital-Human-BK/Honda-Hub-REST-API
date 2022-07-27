@@ -17,6 +17,9 @@ router.post('/register', async (req, res) => {
     res.status(201).json(user);
   } catch (err) {
     const error = mapErrors(err);
+    if(error[0].msg.includes('username: ')){
+      error[0].msg = 'This Username is taken'
+    }
     console.log(error);
     res.status(409).json(error);
   }
