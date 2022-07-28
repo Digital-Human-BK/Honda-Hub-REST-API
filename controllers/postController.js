@@ -1,12 +1,12 @@
 const router = require('express').Router();
 
+const mapErrors = require('../util/mappers');
 const service = require('../services/postService');
 const {
   incrementUserPosts,
   updateUserReputation,
   getUserInfo,
 } = require('../services/userService');
-const mapErrors = require('../util/mappers');
 
 router.get('/posts-count', async (req, res) => {
   try {

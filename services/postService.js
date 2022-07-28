@@ -34,7 +34,7 @@ async function getUserPosts(userId) {
 
 async function getPost(id) {
   return Post.findById(id)
-    .populate('author', 'username role rank reputation posts drives sign')
+    .populate('author', 'username role rank reputation posts cars sign')
     .lean();
 }
 

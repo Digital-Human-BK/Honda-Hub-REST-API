@@ -52,25 +52,43 @@ async function getUserByEmail(email) {
   return User.findOne({ email });
 }
 
-async function getUserInfo(id){
-  const user = await User.findById({ _id: id}, {password: 0, email: 0}).lean();
+async function getUserInfo(userId) {
+  const user = await User.findById(
+    { _id: userId },
+    { password: 0, email: 0 }
+  ).lean();
   return user;
-};
+}
 
-async function incrementUserPosts(id) {
-  const user = await User.findById(id);
+async function incrementUserPosts(userId) {
+  const user = await User.findById(userId);
 
   user.posts += 1;
   await user.save();
 }
 
-async function updateUserReputation(id, value) {
-
-  const user = await User.findById(id);
+async function updateUserReputation(userId, value) {
+  const user = await User.findById(userId);
   if (user.reputation + value >= 0) {
     user.reputation += value;
     await user.save();
   }
+}
+
+async function updateUserInfo(userId, data) {
+  const user = await User.findById(userId);
+
+  user.cars = data.cars;
+  user.sign = data.sign;
+  user.about = data.about;
+
+  await user.save();
+
+  return {
+    cars: user.cars,
+    sign: user.sign,
+    about: user.about
+  };
 }
 
 module.exports = {
@@ -79,4 +97,5 @@ module.exports = {
   getUserInfo,
   incrementUserPosts,
   updateUserReputation,
+  updateUserInfo
 };

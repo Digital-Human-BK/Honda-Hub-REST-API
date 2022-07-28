@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const emailValidator = require('email-validator');
 
-const USER_REGEX = /^[A-Za-z0-9]+$/;
+const USER_REGEX = /^\w+$/;
 
 const userSchema = new Schema({
   username: {
@@ -9,7 +9,6 @@ const userSchema = new Schema({
     required: [true, 'Username is required'],
     minlength: [2, 'Min username length is 2 characters'],
     maxlength: [16, 'Max username length is 16 characters'],
-    unique: true,
     validate: {
       validator(value) {
         return USER_REGEX.test(value);
@@ -51,17 +50,17 @@ const userSchema = new Schema({
     default: 0,
     min: 0,
   },
-  drives: {
+  cars: {
     type: String,
-    default: 'Nothing yet',
-    minlength: [1, 'Min length is 1 character'],
-    maxlength: [60, 'Max length is 60 characters'],
+    default: '',
   },
   sign: {
     type: String,
-    default: null,
-    minlength: [3, 'Min sign length is 3 characters'],
-    maxlength: [200, 'Max sign length is 200 characters'],
+    default: '',
+  },
+  about: {
+    type: String,
+    default: '',
   },
   registeredOn: {
     type: Date,
@@ -87,6 +86,17 @@ userSchema.pre('save', function (next) {
 
 userSchema.index(
   { email: 1 },
+  {
+    unique: true,
+    collation: {
+      locale: 'en',
+      strength: 2,
+    },
+  }
+);
+
+userSchema.index(
+  { username: 1 },
   {
     unique: true,
     collation: {

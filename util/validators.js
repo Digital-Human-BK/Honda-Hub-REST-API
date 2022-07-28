@@ -1,5 +1,5 @@
 const emailValidator = require('email-validator');
-const USER_REGEX = /^[A-Za-z0-9]+$/;
+const USER_REGEX = /^\w+$/;
 const PWD_REGEX = /^[A-Za-z0-9]{5,20}$/;
 
 function validateRegister(body) {
@@ -13,7 +13,9 @@ function validateRegister(body) {
     errors.push({ msg: 'Username is required' });
   }
   if (USER_REGEX.test(username) === false && username !== '') {
-    errors.push({ msg: 'Username must be only latin letters and numbers' });
+    errors.push({
+      msg: 'Username must be only latin letters and numbers. No spaces allowed',
+    });
   }
   if (username.length > 0 && username.length < 2) {
     errors.push({ msg: 'Username must be longer than 2 characters' });
@@ -65,7 +67,36 @@ function validateLogin(body) {
   }
 }
 
+function validateUserInfo(body) {
+  const cars = body.cars.trim();
+  const sign = body.sign.trim();
+  const about = body.about.trim();
+
+  const errors = [];
+
+  if (cars.length > 60) {
+    errors.push({ msg: 'Cars length must be 1 to 60 characters long' });
+  }
+  if (sign.length > 0 && sign.length < 3) {
+    errors.push({ msg: 'Sign length must be 3 to 200 characters long' });
+  }
+  if (sign.length > 200) {
+    errors.push({ msg: 'Sign length must be 3 to 200 characters long' });
+  }
+  if (about.length > 0 && about.length < 5) {
+    errors.push({ msg: 'About length must be 5 to 1000 characters long' });
+  }
+  if (about.length > 1000) {
+    errors.push({ msg: 'About length must be 5 to 1000 characters long' });
+  }
+
+  if (errors.length > 0) {
+    throw errors;
+  }
+}
+
 module.exports = {
   validateRegister,
   validateLogin,
+  validateUserInfo,
 };

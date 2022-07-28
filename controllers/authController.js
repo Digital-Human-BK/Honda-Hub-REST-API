@@ -1,8 +1,8 @@
 const router = require('express').Router();
 
-const { register, login } = require('../services/userService');
 const mapErrors = require('../util/mappers');
-const { validateRegister, validateLogin } = require('../util/validators');
+const { validateRegister, validateLogin, validateUserInfo } = require('../util/validators');
+const { register, login, updateUserInfo } = require('../services/userService');
 
 router.post('/register', async (req, res) => {
   try {
@@ -18,7 +18,7 @@ router.post('/register', async (req, res) => {
   } catch (err) {
     const error = mapErrors(err);
     if(error[0].msg.includes('username: ')){
-      error[0].msg = 'This Username is taken'
+      error[0].msg = 'Username already taken'
     }
     console.log(error);
     res.status(409).json(error);
@@ -41,5 +41,24 @@ router.post('/login', async (req, res) => {
     res.status(409).json(error);
   }
 });
+
+router.put('/update-user/:userId', async (req, res) => {
+  try {
+    validateUserInfo(req.body);
+    const updatedData = await updateUserInfo(req.params.userId, {
+      cars: req.body.cars.trim(),
+      sign: req.body.sign.trim(),
+      about: req.body.about.trim(),
+    });
+    res.status(200).json(updatedData);
+  } catch (err) {
+    const error = mapErrors(err);
+    if(error[0].msg.includes('username: ')){
+      error[0].msg = 'Username already taken'
+    }
+    console.log(error);
+    res.status(404).json(error);
+  }
+})
 
 module.exports = router;
