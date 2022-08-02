@@ -22,7 +22,7 @@ async function register(username, email, password) {
     _id: user._id,
     username: user.username,
     email: user.email,
-    registeredOn: user.registeredOn,
+    imageUrl: user.imageUrl,
   };
 }
 
@@ -44,7 +44,7 @@ async function login(email, password) {
     _id: user._id,
     username: user.username,
     email: user.email,
-    registeredOn: user.registeredOn,
+    imageUrl: user.imageUrl,
   };
 }
 
@@ -87,7 +87,18 @@ async function updateUserInfo(userId, data) {
   return {
     cars: user.cars,
     sign: user.sign,
-    about: user.about
+    about: user.about,
+  };
+}
+
+async function updateUserImage(userId, data) {
+  const user = await User.findById(userId);
+
+  user.imageUrl = data.imageUrl;
+  await user.save();
+
+  return {
+    imageUrl: user.imageUrl,
   };
 }
 
@@ -97,5 +108,6 @@ module.exports = {
   getUserInfo,
   incrementUserPosts,
   updateUserReputation,
-  updateUserInfo
+  updateUserInfo,
+  updateUserImage,
 };

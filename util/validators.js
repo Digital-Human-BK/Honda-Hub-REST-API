@@ -1,6 +1,7 @@
 const emailValidator = require('email-validator');
 const USER_REGEX = /^\w+$/;
 const PWD_REGEX = /^[A-Za-z0-9]{5,20}$/;
+const IMAGE_URL_REGEX = /^https?:\/\/.+\.(jpg|jpeg|png|gif)$/;
 
 function validateRegister(body) {
   const username = body.username.trim();
@@ -95,8 +96,15 @@ function validateUserInfo(body) {
   }
 }
 
+function validateImageUrl(imageUrl) {
+  if(IMAGE_URL_REGEX.test(imageUrl) === false) {
+    throw new Error('Invalid Image URL');
+  }
+}
+
 module.exports = {
   validateRegister,
   validateLogin,
   validateUserInfo,
+  validateImageUrl
 };

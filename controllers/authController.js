@@ -1,8 +1,20 @@
 const router = require('express').Router();
 
 const mapErrors = require('../util/mappers');
-const { validateRegister, validateLogin, validateUserInfo } = require('../util/validators');
-const { register, login, updateUserInfo } = require('../services/userService');
+
+const {
+  validateRegister,
+  validateLogin,
+  validateUserInfo,
+  validateImageUrl,
+} = require('../util/validators');
+
+const {
+  register,
+  login,
+  updateUserInfo,
+  updateUserImage,
+} = require('../services/userService');
 
 router.post('/register', async (req, res) => {
   try {
@@ -17,8 +29,8 @@ router.post('/register', async (req, res) => {
     res.status(201).json(user);
   } catch (err) {
     const error = mapErrors(err);
-    if(error[0].msg.includes('username: ')){
-      error[0].msg = 'Username already taken'
+    if (error[0].msg.includes('username: ')) {
+      error[0].msg = 'Username already taken';
     }
     console.log(error);
     res.status(409).json(error);
@@ -53,12 +65,26 @@ router.put('/update-user/:userId', async (req, res) => {
     res.status(200).json(updatedData);
   } catch (err) {
     const error = mapErrors(err);
-    if(error[0].msg.includes('username: ')){
-      error[0].msg = 'Username already taken'
+    if (error[0].msg.includes('username: ')) {
+      error[0].msg = 'Username already taken';
     }
     console.log(error);
     res.status(404).json(error);
   }
-})
+});
+
+router.put('/update-image/:userId', async (req, res) => {
+  try {
+    validateImageUrl(req.body.imageUrl);
+    const updatedUrl = await updateUserImage(req.params.userId, {
+      imageUrl: req.body.imageUrl,
+    });
+    res.status(200).json(updatedUrl);
+  } catch (err) {
+    const error = mapErrors(err);
+    console.log(error);
+    res.status(404).json(error);
+  }
+});
 
 module.exports = router;

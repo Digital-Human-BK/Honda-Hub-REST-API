@@ -32,6 +32,11 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  imageUrl: {
+    type: String,
+    default:
+      'https://res.cloudinary.com/dio4dx3uy/image/upload/v1659378780/honda-hub/default-avatar_awawdx.jpg',
+  },
   role: {
     type: String,
     default: 'User',

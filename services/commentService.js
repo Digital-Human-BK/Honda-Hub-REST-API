@@ -2,7 +2,7 @@ const Comment = require('../models/Comment');
 
 async function getComments(postId) {
   return Comment.find({ postId })
-    .populate('author', 'username role rank reputation posts cars sign')
+    .populate('author', 'username imageUrl role rank reputation posts cars sign')
     .lean();
 }
 
