@@ -2,7 +2,7 @@
   "name": "honda-hub-rest-api",
   "version": "1.0.0",
   "description": "REST API for my 'Honda Hub' React project ",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
